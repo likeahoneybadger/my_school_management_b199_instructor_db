@@ -1,12 +1,13 @@
 package com.project.schoolmanagment.entity.concretes.user;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.schoolmanagment.entity.concretes.business.LessonProgram;
-import com.project.schoolmanagment.entity.concretes.business.Meet;
-import com.project.schoolmanagment.entity.concretes.business.StudentInfo;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.project.schoolmanagment.entity.concretes.businnes.LessonProgram;
+import com.project.schoolmanagment.entity.concretes.businnes.Meet;
+import com.project.schoolmanagment.entity.concretes.businnes.StudentInfo;
 import com.project.schoolmanagment.entity.enums.Gender;
 import lombok.*;
 
@@ -14,6 +15,15 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+
+/**
+ * The User class represents a user in the system.
+ * It contains information about the user, such as their username,
+ * social security number, name, surname, date of birth, birth place,
+ * password, phone number, email, built-in status, mother's name,
+ * father's name, student number, active status, advisor status,
+ * advisor teacher ID, gender, user role, lesson programs and meeting attendance.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,65 +32,70 @@ import java.util.Set;
 @Entity
 @Table(name = "t_user")
 public class User {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+  
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;  
+  
+  @Column(unique = true)
+  private String username;
+  
+  @Column(unique = true)
+  private String ssn;
+  
+  private String name;
+  
+  private String surname;
+  
+  @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd")
+  private LocalDate birthDay;
+  
+  private String birthPlace;
+  
+  @JsonProperty(access = Access.WRITE_ONLY)
+  private String password;
 
-    @Column(unique = true)
-    private String username;
+  @Column(unique = true)
+  private String phoneNumber;
 
-    @Column(unique = true)
-    private String ssn;
+  @Column(unique = true)
+  private String email;
+  
+  private Boolean builtIn;
+  
+  private String motherName;
+  
+  private String fatherName;
+  
+  private int studentNumber;
+  
+  private boolean isActive;
+  
+  private Boolean isAdvisor;
+  
+  private Long advisorTeacherId;
+  
+  @Enumerated(EnumType.STRING)
+  private Gender gender;  
+  
+  @OneToOne
+  @JsonProperty(access = Access.WRITE_ONLY)
+  private UserRole userRole;
+  
+  @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
+  private List<StudentInfo>studentInfos;
+  
+  @ManyToMany
+  @JoinTable(name = "user_lessonProgram",
+              joinColumns = @JoinColumn(name = "user_id"),
+              inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))   
+  private Set<LessonProgram>lessonProgramList;
+  
+  
+  @JsonIgnore //  to prevent infinit loop to happen.
+  @ManyToMany(mappedBy = "studentList")
+  private List<Meet>meetList;
+  
+  
 
-    private String name;
-
-    private String surname;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthDay;
-
-    private String birthPlace;
-
-    @JsonProperty(access =JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    @Column(unique = true)
-    private String phoneNumber;
-
-    @Column(unique = true)
-    private String email;
-
-    private Boolean builtIn;
-
-    private String motherName;
-
-    private String fatherName;
-
-    private int studentNumber;
-
-    private boolean isActive;
-
-    private Boolean isAdvisor;
-
-    private Long advisorTeacherId;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @OneToOne
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private UserRole userRole;
-
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.REMOVE)
-    private List<StudentInfo> studentInfos;
-
-    @ManyToMany
-    @JoinTable(name = "user_lessonProgram",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
-    private Set<LessonProgram> lessonProgramList;
-
-    @JsonIgnore//   it cuts the connection to the user table.
-    @ManyToMany(mappedBy = "studentList")
-    private List<Meet> meetList;
 }

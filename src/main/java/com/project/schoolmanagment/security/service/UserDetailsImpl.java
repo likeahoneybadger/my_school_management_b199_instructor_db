@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailsImplementation implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private Long Id;
 
@@ -30,11 +30,12 @@ public class UserDetailsImplementation implements UserDetails {
     private String password;
 
     private String ssn;
+    //  We upgrade the user to GrantedAuthority
+    private List<GrantedAuthority> authorities; //  it is the same as below one.
+//    private Collection<? extends GrantedAuthority> authorities; //  a kind of collection extends Granted Authority class
 
-    private Collection<? extends GrantedAuthority> authorities;
-
-    public UserDetailsImplementation(Long id, String username, String name, Boolean isAdvisor,
-                                     String password, String ssn, String role) {
+    public UserDetailsImpl(Long id, String username, String name, Boolean isAdvisor,
+                           String password, String ssn, String role /*  role info comes from DB as String so we changed authorities to role and GrantedAuthority to String*/) {
         Id = id;
         this.username = username;
         this.name = name;
@@ -53,31 +54,31 @@ public class UserDetailsImplementation implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

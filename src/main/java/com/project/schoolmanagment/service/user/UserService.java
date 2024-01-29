@@ -146,20 +146,20 @@ public class UserService {
         userToSave.setUserRole(user.getUserRole());
         //  entity3: return type of save operation
         User savedUser = userRepository.save(userToSave);
+        //time to return BaseUserResponse DTO to controller
         return ResponseMessage.<BaseUserResponse>builder()
                 .message(SuccessMessages.USER_UPDATE_MESSAGE)
                 .httpStatus(HttpStatus.OK)
                 .object(userMapper.mapUserToUserResponse(savedUser))
                 .build();
-
     }
 
     public String deleteUserById(Long id, HttpServletRequest httpServletRequest) {
         //  we dont need to write an exception everytime with the help of methodHelper. But be aware of injecting it beforehand!
         User user = methodHelper.isUserExist(id);
 
-        //username of logged in person
-        String userName = httpServletRequest.getHeader("username");
+        //username of logged in person  -   this is very important for us. EG. we have a requirement like: Admin deletes Dean, Assistant Dean
+        String userName = (String) httpServletRequest.getAttribute("username");
 
         User loggedInUser = userRepository.findByUsername(userName);
 
@@ -186,5 +186,8 @@ public class UserService {
             userRepository.deleteById(id);
         }
         return SuccessMessages.USER_DELETE;
+    }
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 }

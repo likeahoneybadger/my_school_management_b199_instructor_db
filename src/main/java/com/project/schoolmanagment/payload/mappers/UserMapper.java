@@ -3,18 +3,22 @@ package com.project.schoolmanagment.payload.mappers;
 import com.project.schoolmanagment.entity.concretes.user.User;
 import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 import com.project.schoolmanagment.payload.response.user.UserResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
 
-    public User mapUserRequestToUser(BaseUserRequest userRequest){//    we should not inherit User class to use the Builder annotation
-                                                                    //  otherwise, we should use super builder class.
+    private final PasswordEncoder passwordEncoder;
+    public User mapUserRequestToUser(BaseUserRequest userRequest){  //      we should not inherit any class to use the Builder annotation
+                                                                    //      otherwise, we should use super builder.
         return User.builder()
                 .username(userRequest.getUsername())
                 .name(userRequest.getName())
                 .surname(userRequest.getSurname())
-                .password(userRequest.getPassword())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .ssn(userRequest.getSsn())
                 .birthDay(userRequest.getBirthDay())
                 .birthPlace(userRequest.getBirthPlace())
@@ -22,6 +26,7 @@ public class UserMapper {
                 .gender(userRequest.getGender())
                 .email(userRequest.getEmail())
                 .builtIn(userRequest.getBuiltIn())
+                //  since we will not save teacher with these end-points
                 .isAdvisor(false)
                 .build();
     }

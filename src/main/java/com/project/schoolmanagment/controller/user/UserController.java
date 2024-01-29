@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/user")
 @RequiredArgsConstructor    //  for dependency injection
 public class UserController {
-    //@Autowired        instead of this, we used @RequiredArgsConstructor and final keyword
+    /**@Autowired        instead of this, we used @RequiredArgsConstructor and final keyword*/
     private final UserService userService;
 
     @PostMapping("/save/{userRole}")

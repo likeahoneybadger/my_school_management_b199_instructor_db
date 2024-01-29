@@ -1,7 +1,8 @@
 package com.project.schoolmanagment.payload.response.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.project.schoolmanagment.entity.concretes.business.LessonProgram;
+
+import com.project.schoolmanagment.entity.concretes.businnes.LessonProgram;
 import com.project.schoolmanagment.payload.response.abstracts.BaseUserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

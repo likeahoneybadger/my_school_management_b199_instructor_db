@@ -104,7 +104,7 @@ public class ContactMessageController {
 
     @DeleteMapping("/deleteById")
     //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    public ResponseEntity<String> deleteById(@RequestParam(value = "concactMessageId") Long contactMessageId){
+    public ResponseEntity<String> deleteById(@RequestParam(value = "contactMessageId") Long contactMessageId){
         return ResponseEntity.ok(contactMessageService.deleteById(contactMessageId));
     }
 
