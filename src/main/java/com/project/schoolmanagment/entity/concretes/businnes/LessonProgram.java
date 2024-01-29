@@ -48,7 +48,7 @@ public class LessonProgram {
   )
   private Set<Lesson>lessons;
   
-  //TODO learn about all cascade ops. cases
+  /**learn about all cascade ops. cases*/
   @ManyToOne(cascade = CascadeType.PERSIST)
   private EducationTerm educationTerm;
   
